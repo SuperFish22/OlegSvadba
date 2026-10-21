@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Екатерина & Олге — 27.06.2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ===== КОСМИЧЕСКИЙ ФОН ===== */
+body{
+  font-family:'Georgia',serif;
+  background:#05060f;
+  color:#e8e6f0;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+.cosmos-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(74,45,107,.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(168,52,111,.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(13,27,76,.4) 0%, transparent 60%),
+    #05060f;
+}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{
+  position:absolute;background:#fff;border-radius:50%;
+  animation:twinkle 4s infinite ease-in-out;
+}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+.nebula{
+  position:fixed;border-radius:50%;filter:blur(60px);opacity:.4;z-index:0;pointer-events:none;
+  animation:float 20s infinite ease-in-out;
+}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
+
+/* ===== ЭКРАН-КОНВЕРТ ===== */
+.envelope-screen{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:radial-gradient(ellipse at center,#0d1b4c 0%,#05060f 70%);
+  cursor:pointer;transition:opacity .8s ease;
+}
+.envelope-screen.hidden{opacity:0;pointer-events:none}
+
+.envelope-container{
+  position:relative;
+  width:min(340px,88vw);height:min(240px,60vw);
+  perspective:800px;
+  animation:float 6s infinite ease-in-out;
+}
+.env-body{
+  position:absolute;bottom:0;left:0;right:0;height:65%;
+  background:linear-gradient(160deg,#1a1a2e 0%,#0d1b4c 50%,#0a0a14 100%);
+  border:1px solid rgba(232,122,158,.3);
+  border-radius:0 0 12px 12px;
+  box-shadow:0 15px 50px rgba(168,52,111,.3), inset 0 -4px 10px rgba(0,0,0,.4);
+  z-index:1;
+}
+.env-flap{
+  position:absolute;top:0;left:0;right:0;height:55%;
+  background:linear-gradient(180deg,#2a1a3e 0%,#1a1a2e 100%);
+  border:1px solid rgba(232,122,158,.25);
+  clip-path:polygon(0 0,50% 100%,100% 0);
+  transform-origin:top center;
+  transition:transform .8s ease;
+  z-index:3;
+}
+.envelope-container.open .env-flap{transform:rotateX(-180deg)}
+
+.env-stamp{
+  position:absolute;top:12px;right:12px;
+  width:48px;height:56px;
+  background:linear-gradient(135deg,#a8346f,#e87a9e);
+  border:1px dashed rgba(255,255,255,.4);
+  border-radius:3px;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  font-size:20px;z-index:4;
+  box-shadow:0 0 15px rgba(232,122,158,.5);
+}
+.env-stamp-text{font-size:6px;color:rgba(255,255,255,.9);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+.env-seal{
+  position:absolute;bottom:calc(65% - 22px);left:50%;transform:translateX(-50%);
+  width:44px;height:44px;
+  background:radial-gradient(circle at 35% 35%,#e87a9e,#a8346f);
+  border-radius:50%;z-index:5;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 0 20px rgba(232,122,158,.6),inset 0 -2px 4px rgba(0,0,0,.3);
+  transition:opacity .3s;
+}
+.envelope-container.open .env-seal{opacity:0}
+
+.env-letter{
+  position:absolute;left:8%;right:8%;bottom:8%;height:55%;
+  background:linear-gradient(180deg,#12122a,#0d1b4c);
+  border:1px solid rgba(232,122,158,.3);
+  border-radius:4px;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:15px 12px;
+  box-shadow:0 0 30px rgba(168,52,111,.3);
+  transition:transform 1s cubic-bezier(.25,.8,.25,1) .4s;
+}
+.envelope-container.open .env-letter{transform:translateY(-160%)}
+.env-letter-content .letter-greeting{
+  font-size:clamp(10px,2.8vw,13px);color:#e87a9e;
+  text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;
+}
+.env-letter-content .letter-main{
+  font-size:clamp(18px,5vw,24px);font-weight:bold;color:#fff;margin-bottom:4px;
+  text-shadow:0 0 20px rgba(232,122,158,.6);
+}
+.env-letter-content .letter-sub{
+  font-size:clamp(11px,3vw,15px);color:#b8a8d0;font-style:italic;
+}
+.envelope-hint{
+  margin-top:35px;color:#e87a9e;
+  font-size:clamp(15px,4vw,19px);
+  animation:blink 2s infinite;text-align:center;line-height:1.4;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.envelope-hint span{display:block;font-size:clamp(11px,3vw,13px);margin-top:4px;opacity:.7}
+
+/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
+.main-content{
+  display:none;max-width:720px;margin:0 auto;
+  padding:16px;position:relative;z-index:1;
+}
+.main-content.visible{display:block}
+
+.music-btn{
+  position:fixed;top:16px;right:16px;z-index:100;
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(13,27,76,.7);border:1px solid rgba(232,122,158,.4);
+  color:#e87a9e;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(10px);transition:all .3s;
+}
+.music-btn:hover{transform:scale(1.1);box-shadow:0 0 20px rgba(232,122,158,.5)}
+.music-btn.muted{opacity:.5}
+
+.section{
+  margin:40px 0;
+  padding:clamp(20px,5vw,35px);
+  background:linear-gradient(180deg,rgba(13,27,76,.6),rgba(5,6,15,.6));
+  border:1px solid rgba(232,122,158,.2);
+  border-radius:16px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 40px rgba(74,45,107,.2);
+}
+.section-title{
+  font-size:clamp(22px,6vw,32px);
+  color:#e87a9e;text-align:center;
+  margin-bottom:20px;
+  text-shadow:0 0 20px rgba(232,122,158,.4);
+  letter-spacing:1px;
+}
+.section-title small{display:block;font-size:clamp(11px,3vw,13px);color:#8a7aa8;font-style:italic;margin-top:6px;letter-spacing:2px;text-transform:uppercase}
+
+.hero{
+  text-align:center;
+  padding:clamp(40px,12vw,80px) 20px;
+  min-height:80vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+}
+.hero-eyebrow{
+  font-size:clamp(11px,3vw,14px);letter-spacing:6px;
+  text-transform:uppercase;color:#8a7aa8;margin-bottom:20px;
+}
+.hero-names{
+  font-size:clamp(38px,12vw,76px);
+  color:#fff;font-style:italic;
+  line-height:1.15;
+  text-shadow:0 0 40px rgba(232,122,158,.6),0 0 80px rgba(168,52,111,.3);
+  margin-bottom:20px;
+}
+.hero-names .amp{
+  display:block;font-size:.6em;color:#e87a9e;margin:4px 0;
+}
+.hero-date{
+  font-size:clamp(16px,4.5vw,22px);
+  color:#e87a9e;letter-spacing:4px;
+  margin-bottom:8px;
+}
+.hero-place{
+  font-size:clamp(13px,3.5vw,16px);
+  color:#b8a8d0;font-style:italic;
+}
+.hero-scroll{
+  margin-top:40px;color:#8a7aa8;font-size:13px;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+.map-card{
+  background:rgba(10,10,20,.6);
+  border:1px solid rgba(232,122,158,.25);
+  border-radius:12px;padding:20px;text-align:center;
+}
+.map-card .loc-icon{font-size:44px;margin-bottom:8px}
+.map-card .loc-name{
+  font-size:clamp(22px,6vw,30px);font-weight:bold;color:#fff;margin-bottom:6px;
+}
+.map-card .loc-addr{
+  font-size:clamp(13px,3.5vw,16px);color:#b8a8d0;margin-bottom:16px;
+}
+.map-links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.map-link{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 18px;border-radius:30px;
+  background:rgba(232,122,158,.15);
+  border:1px solid rgba(232,122,158,.4);
+  color:#e87a9e;text-decoration:none;
+  font-size:clamp(12px,3vw,14px);
+  transition:all .3s;
+}
+.map-link:hover{background:rgba(232,122,158,.3);transform:translateY(-2px)}
+.map-iframe{
+  width:100%;height:280px;border:0;border-radius:12px;margin-top:16px;
+  filter:grayscale(.3) invert(.9) hue-rotate(180deg);
+}
+
+.dresscode-palette{
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0;
+}
+.swatch{
+  width:clamp(70px,18vw,110px);
+  text-align:center;
+}
+.swatch-color{
+  width:100%;aspect-ratio:1;border-radius:50%;
+  border:2px solid rgba(255,255,255,.15);
+  box-shadow:0 0 20px rgba(0,0,0,.5);
+  margin-bottom:6px;
+  transition:transform .3s;
+}
+.swatch:hover .swatch-color{transform:scale(1.08)}
+.swatch-name{font-size:clamp(10px,2.5vw,12px);color:#b8a8d0;letter-spacing:1px;text-transform:uppercase}
+.dresscode-note{
+  margin-top:24px;padding:18px;
+  background:rgba(232,122,158,.08);
+  border-left:3px solid #e87a9e;
+  border-radius:8px;
+  font-size:clamp(13px,3.5vw,16px);
+  color:#d8c8e8;font-style:italic;line-height:1.6;
+}
+.dresscode-note strong{color:#e87a9e;font-style:normal}
+
+.timeline{position:relative;padding-left:30px}
+.timeline::before{
+  content:"";position:absolute;left:10px;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,#e87a9e,#4a2d6b);
+}
+.tl-item{
+  position:relative;padding:12px 0 12px 10px;
+  font-size:clamp(13px,3.5vw,16px);
+}
+.tl-item::before{
+  content:"";position:absolute;left:-26px;top:18px;
+  width:14px;height:14px;border-radius:50%;
+  background:#e87a9e;box-shadow:0 0 15px rgba(232,122,158,.8);
+}
+.tl-time{color:#e87a9e;font-weight:bold;font-size:clamp(14px,4vw,18px);display:block}
+.tl-desc{color:#d8c8e8}
+
+.rules{list-style:none;counter-reset:r}
+.rules li{
+  counter-increment:r;position:relative;
+  padding:12px 0 12px 44px;
+  font-size:clamp(13px,3.5vw,16px);
+  color:#d8c8e8;line-height:1.5;
+  border-bottom:1px solid rgba(232,122,158,.1);
+}
+.rules li:last-child{border-bottom:none}
+.rules li::before{
+  content:counter(r);position:absolute;left:0;top:12px;
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,#a8346f,#e87a9e);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:bold;
+  box-shadow:0 0 15px rgba(232,122,158,.4);
+}
+
+.rsvp-form{display:flex;flex-direction:column;gap:16px}
+.field label{
+  display:block;font-size:clamp(12px,3vw,14px);
+  color:#e87a9e;text-transform:uppercase;letter-spacing:2px;
+  margin-bottom:8px;
+}
+.field input,.field select,.field textarea{
+  width:100%;padding:14px 16px;
+  background:rgba(10,10,20,.7);
+  border:1px solid rgba(232,122,158,.3);
+  border-radius:10px;
+  color:#e8e6f0;font-family:inherit;
+  font-size:clamp(14px,3.8vw,16px);
+  transition:border-color .3s,box-shadow .3s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:#e87a9e;
+  box-shadow:0 0 20px rgba(232,122,158,.3);
+}
+.field textarea{min-height:80px;resize:vertical}
+.radio-group{display:flex;flex-wrap:wrap;gap:10px}
+.radio-pill{
+  flex:1 1 auto;min-width:120px;
+  padding:12px 16px;border-radius:30px;
+  background:rgba(10,10,20,.7);
+  border:1px solid rgba(232,122,158,.3);
+  color:#b8a8d0;cursor:pointer;text-align:center;
+  font-size:clamp(12px,3vw,14px);
+  transition:all .3s;user-select:none;
+}
+.radio-pill input{display:none}
+.radio-pill:has(input:checked){
+  background:linear-gradient(135deg,#a8346f,#e87a9e);
+  color:#fff;border-color:#e87a9e;
+  box-shadow:0 0 20px rgba(232,122,158,.5);
+}
+.checkbox-pill{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;border-radius:10px;
+  background:rgba(10,10,20,.7);
+  border:1px solid rgba(232,122,158,.3);
+  color:#b8a8d0;cursor:pointer;
+  font-size:clamp(13px,3.2vw,15px);
+  transition:all .3s;user-select:none;
+}
+.checkbox-pill:has(input:checked){
+  background:rgba(232,122,158,.2);
+  border-color:#e87a9e;color:#e87a9e;
+}
+.checkbox-pill input{accent-color:#e87a9e;width:18px;height:18px}
+.submit-btn{
+  padding:16px 40px;border-radius:30px;border:none;
+  background:linear-gradient(135deg,#a8346f,#e87a9e);
+  color:#fff;font-family:inherit;font-weight:bold;
+  font-size:clamp(16px,4.5vw,20px);
+  cursor:pointer;transition:all .3s;
+  box-shadow:0 0 30px rgba(232,122,158,.4);
+  margin-top:10px;
+}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 0 45px rgba(232,122,158,.6)}
+.submit-btn:active{transform:scale(.97)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.form-success{
+  display:none;text-align:center;padding:30px 20px;
+  color:#e87a9e;font-size:clamp(16px,4.5vw,22px);
+  line-height:1.6;
+}
+.form-success.show{display:block;animation:popIn .5s}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
+
+.countdown{display:flex;justify-content:center;gap:clamp(8px,3vw,16px);flex-wrap:wrap}
+.cd-item{
+  background:rgba(10,10,20,.7);
+  border:1px solid rgba(232,122,158,.3);
+  border-radius:12px;padding:14px clamp(10px,3vw,18px);
+  min-width:clamp(60px,16vw,80px);text-align:center;
+  box-shadow:0 0 20px rgba(74,45,107,.3);
+}
+.cd-num{font-size:clamp(26px,8vw,42px);font-weight:bold;color:#e87a9e;display:block;text-shadow:0 0 20px rgba(232,122,158,.5)}
+.cd-label{font-size:clamp(9px,2.2vw,11px);text-transform:uppercase;letter-spacing:2px;color:#8a7aa8}
+
+.secret-box{
+  text-align:center;padding:30px 20px;cursor:pointer;
+  border:2px dashed rgba(232,122,158,.4);
+  border-radius:16px;
+  transition:all .4s;
+}
+.secret-box:hover{border-color:#e87a9e;background:rgba(232,122,158,.05)}
+.secret-inner{
+  font-size:clamp(15px,4vw,19px);
+  color:#d8c8e8;line-height:1.7;font-style:italic;
+  filter:blur(8px);user-select:none;transition:filter .8s;
+}
+.secret-box.revealed .secret-inner{filter:blur(0);user-select:auto}
+.secret-hint{margin-top:14px;font-size:clamp(11px,3vw,13px);color:#8a7aa8;font-style:italic}
+.secret-box.revealed .secret-hint{color:#e87a9e}
+
+.footer{
+  text-align:center;padding:40px 20px;color:#8a7aa8;
+  font-size:clamp(12px,3vw,14px);font-style:italic;
+}
+.footer strong{color:#e87a9e}
+
+.confetti-container{position:fixed;inset:0;pointer-events:none;z-index:9998}
+.confetti-piece{
+  position:absolute;top:-20px;width:10px;height:10px;
+  animation:confettiFall 3s forwards;
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-100vh) rotate(0);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+
+.fade-in{opacity:0;transform:translateY(30px);transition:all .7s ease-out}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:480px){
+  .section{padding:16px;margin:24px 0}
+  .map-iframe{height:220px}
+}
+</style>
+</head>
+<body>
+
+<!-- Космический фон -->
+<div class="cosmos-bg"></div>
+<div class="stars" id="stars"></div>
+<div class="nebula" style="width:400px;height:400px;background:#4a2d6b;top:-100px;left:-100px"></div>
+<div class="nebula" style="width:300px;height:300px;background:#a8346f;bottom:-100px;right:-100px;animation-delay:-10s"></div>
+
+<!-- Кнопка музыки -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Музыка">🔇</button>
+<audio id="bgMusic" loop>
+  <!-- ⚠️ ЗАМЕНИТЕ ССЫЛКУ НА СВОЮ МУЗЫКУ -->
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2c8f1e5a3b.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===== ЭКРАН-КОНВЕРТ ===== -->
+<div class="envelope-screen" id="envelope" onclick="openEnvelope()">
+  <div class="envelope-container" id="envelopeWrap">
+    <div class="env-flap"></div>
+    <div class="env-stamp">💌<span class="env-stamp-text">приглашение</span></div>
+    <div class="env-letter">
+      <div class="env-letter-content">
+        <div class="letter-greeting">Внимание!</div>
+        <div class="letter-main">Вам приглашение</div>
+        <div class="letter-sub">на свадьбу 💍</div>
+      </div>
+    </div>
+    <div class="env-seal">💍</div>
+    <div class="env-body"></div>
+  </div>
+  <div class="envelope-hint">
+    ✨ Нажми, чтобы открыть
+    <span>тебя ждёт космическое приглашение</span>
+  </div>
+</div>
+
+<!-- Конфетти -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+<div class="main-content" id="mainContent">
+
+  <!-- 1. ГЛАВНЫЙ ЭКРАН -->
+  <div class="hero fade-in">
+    <div class="hero-eyebrow">Приглашение на свадьбу</div>
+    <div class="hero-names">
+      Екатерина
+      <span class="amp">&</span>
+      Олег
+    </div>
+    <div class="hero-date">27 · 06 · 2026</div>
+    <div class="hero-place">Москва · LEO LOFT</div>
+    <div class="hero-scroll">листай вниз ↓</div>
+  </div>
+
+  <!-- 2. МЕСТО И КАК ДОБРАТЬСЯ -->
+  <div class="section fade-in">
+    <div class="section-title">
+      📍 Где и когда
+      <small>место встречи</small>
+    </div>
+    <div class="map-card">
+      <div class="loc-icon">🏙️</div>
+      <div class="loc-name">LEO LOFT</div>
+      <div class="loc-addr">Варшавское ш., 33, стр. 13, Москва<br>этаж 2, помещение 211</div>
+      <div class="map-links">
+        <a class="map-link" href="https://yandex.ru/maps/?text=Варшавское+шоссе+33+стр+13+Москва" target="_blank" rel="noopener">🗺️ Яндекс.Карты</a>
+        <a class="map-link" href="https://maps.google.com/?q=Варшавское+шоссе+33+стр+13+Москва" target="_blank" rel="noopener">🌍 Google Maps</a>
+      </div>
+      <iframe class="map-iframe" src="https://yandex.ru/map-widget/v1/?text=Варшавское%20шоссе%2033%20стр%2013%20Москва&z=16" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <div class="dresscode-note" style="margin-top:16px">
+      <strong>🚗 На машине:</strong> парковка на территории, подробности пришлём по запросу.<br>
+      <strong>🚇 На метро:</strong> ближайшие станции — Варшавская / Каховская, далее 10 минут пешком.
+    </div>
+  </div>
+
+  <!-- 3. ДРЕСС-КОД -->
+  <div class="section fade-in">
+    <div class="section-title">
+      🎨 Дресс-код
+      <small>космическая палитра</small>
+    </div>
+    <p style="text-align:center;color:#b8a8d0;font-size:clamp(13px,3.5vw,16px);margin-bottom:20px;font-style:italic">
+      Мы будем рады, если вы поддержите нашу палитру:
+    </p>
+    <div class="dresscode-palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0a0a0f"></div>
+        <div class="swatch-name">Чёрный</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0d1b4c"></div>
+        <div class="swatch-name">Полночь</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#4a2d6b"></div>
+        <div class="swatch-name">Туманность</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#a8346f"></div>
+        <div class="swatch-name">Заря</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#e87a9e"></div>
+        <div class="swatch-name">Пыльца</div>
+      </div>
+    </div>
+    <div class="dresscode-note">
+      <strong>Но если вам кажется, что лучшим вариантом на этом мероприятии будет то самое зелёное платье или костюм, которое уже долго ждало своего часа в вашем шкафу — напишите нам, скорее всего мы одобрим.</strong> 💚
+    </div>
+  </div>
+
+  <!-- 4. ПРОГРАММА -->
+  <div class="section fade-in">
+    <div class="section-title">
+      🗓️ Программа
+      <small>как пройдёт наш вечер</small>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-time">15:45</span>
+        <span class="tl-desc">Сбор гостей, welcome-зона</span>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">16:00</span>
+        <span class="tl-desc">Торжественная церемония</span>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">17:00</span>
+        <span class="tl-desc">Банкет и поздравления</span>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">20:30</span>
+        <span class="tl-desc">Финал торжественной части, прощаемся с самыми маленькими и уставшими</span>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">21:00</span>
+        <span class="tl-desc">Дискотека для старших отрядов 💃</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ПРАВИЛА -->
+  <div class="section fade-in">
+    <div class="section-title">
+      📋 Правила
+      <small>нашего космического лагеря</small>
+    </div>
+    <ol class="rules">
+      <li>Веселиться от души — обязательно!</li>
+      <li>Дресс-код — рекомендация, а не приговор. Главное — вам должно быть комфортно.</li>
+      <li>Алкоголь — в умеренных количествах и только для совершеннолетних гостей.</li>
+      <li>Просим не дарить цветы — лучше принесите игрушку для нашей кошки 🐱</li>
+      <li>Подтверждение присутствия обязательно — заполните анкету ниже.</li>
+    </ol>
+  </div>
+
+  <!-- 6. ОБРАТНЫЙ ОТСЧЁТ -->
+  <div class="section fade-in" style="text-align:center">
+    <div class="section-title">
+      ⏳ До свадьбы осталось
+      <small>считаем вместе</small>
+    </div>
+    <div class="countdown">
+      <div class="cd-item"><span class="cd-num" id="cdDays">--</span><span class="cd-label">дней</span></div>
+      <div class="cd-item"><span class="cd-num" id="cdHours">--</span><span class="cd-label">часов</span></div>
+      <div class="cd-item"><span class="cd-num" id="cdMins">--</span><span class="cd-label">минут</span></div>
+      <div class="cd-item"><span class="cd-num" id="cdSecs">--</span><span class="cd-label">секунд</span></div>
+    </div>
+  </div>
+
+  <!-- 7. АНКЕТА RSVP -->
+  <div class="section fade-in" id="rsvpSection">
+    <div class="section-title">
+      ✋ Подтверждение присутствия
+      <small>пожалуйста, заполните до 01.06.2026</small>
+    </div>
+    <form class="rsvp-form" id="rsvpForm" onsubmit="submitRsvp(event)">
+      <div class="field">
+        <label>Ваше имя и фамилия *</label>
+        <input type="text" name="name" required placeholder="Иван Иванов">
+      </div>
+
+      <div class="field">
+        <label>Придёте? *</label>
+        <div class="radio-group">
+          <label class="radio-pill"><input type="radio" name="attend" value="yes" required> Да, буду!</label>
+          <label class="radio-pill"><input type="radio" name="attend" value="no"> К сожалению, нет</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>С кем вы будете?</label>
+        <div class="radio-group">
+          <label class="radio-pill"><input type="radio" name="company" value="alone"> Один / одна</label>
+          <label class="radio-pill"><input type="radio" name="company" value="pair"> С парой</label>
+          <label class="radio-pill"><input type="radio" name="company" value="kids"> С детьми</label>
+        </div>
+      </div>
+
+      <div class="field" id="kidsField" style="display:none">
+        <label>Сколько детей и их возраст</label>
+        <input type="text" name="kidsInfo" placeholder="Например: 1 ребёнок, 5 лет">
+      </div>
+
+      <div class="field">
+        <label>Что вы пьёте из алкоголя?</label>
+        <div class="radio-group" style="flex-direction:column">
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="wine"> 🍷 Вино</label>
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="champagne"> 🥂 Шампанское</label>
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="whiskey"> 🥃 Виски</label>
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="vodka"> 🍸 Водка</label>
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="nonAlcohol"> 🧃 Безалкогольное</label>
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="other"> Другое</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Аллергии / особые пожелания по еде</label>
+        <textarea name="food" placeholder="Например: вегетарианка, аллергия на орехи"></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">🚀 Отправить</button>
+    </form>
+    <div class="form-success" id="formSuccess">
+      🎉 Спасибо! Мы получили вашу анкету.<br>
+      Ждём вас на нашей космической свадьбе! 💛
+    </div>
+  </div>
+
+  <!-- 8. СЕКРЕТНОЕ ПОСЛАНИЕ -->
+  <div class="section fade-in">
+    <div class="section-title">
+      🤫 Секретное послание
+      <small>только для вас</small>
+    </div>
+    <div class="secret-box" id="secretBox" onclick="revealSecret()">
+      <div class="secret-inner">
+        Мы так счастливы, что именно ВЫ будете рядом в этот важный день!
+        Каждый из вас — часть нашей истории. Спасибо, что вы есть! 💛
+      </div>
+      <div class="secret-hint" id="secretHint">👆 Нажми, чтобы прочитать</div>
+    </div>
+  </div>
+
+  <!-- ФУТЕР -->
+  <div class="footer fade-in">
+    <p>С любовью,<br><strong>Екатерина & Олге</strong></p>
+    <p style="margin-top:10px">💌 Ждём каждого из вас!</p>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// ⚠️ ВАЖНО: Вставьте сюда URL вашего Google Apps Script
+// (получается после Deploy → Web app, заканчивается на /exec)
+// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9shyDh_mcMD7qwAXkUTO0PgXlEIN8b6PWz8N5QZ1-4jHGubuFkmbyn20HUJXg88W0rQ/exec';
+
+// ===== ЗВЁЗДЫ =====
+(function(){
+  var c=document.getElementById('stars');
+  for(var i=0;i<120;i++){
+    var s=document.createElement('div');
+    s.className='star';
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    var size=1+Math.random()*2.5;
+    s.style.width=s.style.height=size+'px';
+    s.style.animationDuration=(2+Math.random()*4)+'s';
+    s.style.animationDelay=(Math.random()*4)+'s';
+    c.appendChild(s);
+  }
+})();
+
+// ===== МУЗЫКА =====
+var music=document.getElementById('bgMusic');
+var musicBtn=document.getElementById('musicBtn');
+var musicStarted=false;
+
+function startMusic(){
+  if(musicStarted)return;
+  musicStarted=true;
+  music.volume=0.35;
+  music.play().then(function(){
+    musicBtn.textContent='🔊';
+    musicBtn.classList.remove('muted');
+  }).catch(function(){
+    musicBtn.textContent='🔇';
+    musicBtn.classList.add('muted');
+  });
+}
+
+function toggleMusic(){
+  if(!musicStarted){startMusic();return;}
+  if(music.paused){
+    music.play();
+    musicBtn.textContent='🔊';
+    musicBtn.classList.remove('muted');
+  }else{
+    music.pause();
+    musicBtn.textContent='🔇';
+    musicBtn.classList.add('muted');
+  }
+}
+
+// ===== КОНВЕРТ =====
+var envelopeOpened=false;
+function openEnvelope(){
+  if(envelopeOpened)return;
+  envelopeOpened=true;
+  document.getElementById('envelopeWrap').classList.add('open');
+  startMusic();
+  setTimeout(function(){
+    document.getElementById('envelope').classList.add('hidden');
+    document.getElementById('mainContent').classList.add('visible');
+    launchConfetti(50);
+    initScrollAnimations();
+  },1400);
+}
+
+// ===== КОНФЕТТИ =====
+function launchConfetti(count){
+  var c=document.getElementById('confettiContainer');
+  var colors=['#e87a9e','#a8346f','#4a2d6b','#0d1b4c','#ffd700','#fff'];
+  for(var i=0;i<count;i++){
+    var p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(2+Math.random()*3)+'s';
+    p.style.animationDelay=(Math.random()*1.5)+'s';
+    var size=4+Math.random()*8;
+    p.style.width=size+'px';
+    p.style.height=(Math.random()>.5?size:size*1.5)+'px';
+    if(Math.random()>.5)p.style.borderRadius='50%';
+    c.appendChild(p);
+    setTimeout((function(el){return function(){el.remove()}})(p),5000);
+  }
+}
+
+// ===== ОБРАТНЫЙ ОТСЧЁТ =====
+var weddingDate=new Date(2026,5,27,15,45,0);
+function updateCountdown(){
+  var now=new Date();
+  var diff=weddingDate.getTime()-now.getTime();
+  if(diff<0)diff=0;
+  var d=Math.floor(diff/86400000);
+  var h=Math.floor((diff%86400000)/3600000);
+  var m=Math.floor((diff%3600000)/60000);
+  var s=Math.floor((diff%60000)/1000);
+  document.getElementById('cdDays').textContent=d;
+  document.getElementById('cdHours').textContent=h;
+  document.getElementById('cdMins').textContent=m;
+  document.getElementById('cdSecs').textContent=s;
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+// ===== СЕКРЕТ =====
+var secretRevealed=false;
+function revealSecret(){
+  if(secretRevealed)return;
+  secretRevealed=true;
+  document.getElementById('secretBox').classList.add('revealed');
+  document.getElementById('secretHint').textContent='💛 Послание рассекречено!';
+}
+
+// ===== ПОКАЗ ПОЛЯ "ДЕТИ" =====
+document.addEventListener('change',function(e){
+  if(e.target.name==='company'){
+    document.getElementById('kidsField').style.display =
+      e.target.value==='kids'?'block':'none';
+  }
+});
+
+// ===== ОТПРАВКА В GOOGLE ТАБЛИЦУ =====
+function submitRsvp(e){
+  e.preventDefault();
+  const form = document.getElementById('rsvpForm');
+  const data = new FormData(form);
+
+  // Собираем выбранные напитки в строку через запятую
+  const drinks = [];
+  form.querySelectorAll('input[name="drink"]:checked').forEach(cb => {
+    drinks.push(cb.value);
+  });
+
+  // Формируем параметры (ключи = заголовки колонок в таблице)
+  const params = new URLSearchParams();
+  params.append('name', data.get('name') || '');
+  params.append('attend', data.get('attend') || '');
+  params.append('company', data.get('company') || '');
+  params.append('drinks', drinks.join(','));
+  params.append('food', data.get('food') || '');
+  params.append('kidsInfo', data.get('kidsInfo') || '');
+
+  const btn = form.querySelector('.submit-btn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Отправляем...';
+
+  // Если URL не заменён — показываем заглушку (для теста без таблицы)
+  if (SCRIPT_URL === 'ВАШ_WEB_APP_URL_ЗДЕСЬ') {
+    console.warn('⚠️ SCRIPT_URL не настроен. Данные не отправлены.');
+    setTimeout(function(){
+      form.style.display='none';
+      document.getElementById('formSuccess').classList.add('show');
+      launchConfetti(80);
+    }, 800);
+    return;
+  }
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: params,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.result === 'success') {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+      launchConfetti(80);
+    } else {
+      throw new Error(result.error || 'Unknown error');
+    }
+  })
+  .catch(err => {
+    console.error('Ошибка отправки:', err);
+    alert('Не удалось отправить анкету. Попробуйте ещё раз или напишите нам напрямую.');
+    btn.disabled = false;
+    btn.textContent = originalText;
+  });
+}
+
+// ===== SCROLL ANIMATIONS =====
+function initScrollAnimations(){
+  if(!('IntersectionObserver' in window)){
+    document.querySelectorAll('.fade-in').forEach(function(el){el.classList.add('visible')});
+    return;
+  }
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting)e.target.classList.add('visible');
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.fade-in').forEach(function(el){obs.observe(el)});
+}
+</script>
+</body>
+</html>
