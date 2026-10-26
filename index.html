@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Екатерина & Олге — 27.06.2026</title>
+<title>Екатерина &amp; Олге — 21.05.2027</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
@@ -52,6 +52,8 @@ body{
   perspective:800px;
   animation:float 6s infinite ease-in-out;
 }
+
+/* тело конверта — ниже письма */
 .env-body{
   position:absolute;bottom:0;left:0;right:0;height:65%;
   background:linear-gradient(160deg,#1a1a2e 0%,#0d1b4c 50%,#0a0a14 100%);
@@ -60,6 +62,8 @@ body{
   box-shadow:0 15px 50px rgba(168,52,111,.3), inset 0 -4px 10px rgba(0,0,0,.4);
   z-index:1;
 }
+
+/* клапан — только сверху, открывается назад */
 .env-flap{
   position:absolute;top:0;left:0;right:0;height:55%;
   background:linear-gradient(180deg,#2a1a3e 0%,#1a1a2e 100%);
@@ -67,10 +71,11 @@ body{
   clip-path:polygon(0 0,50% 100%,100% 0);
   transform-origin:top center;
   transition:transform .8s ease;
-  z-index:3;
+  z-index:4;
 }
 .envelope-container.open .env-flap{transform:rotateX(-180deg)}
 
+/* марка */
 .env-stamp{
   position:absolute;top:12px;right:12px;
   width:48px;height:56px;
@@ -78,33 +83,36 @@ body{
   border:1px dashed rgba(255,255,255,.4);
   border-radius:3px;
   display:flex;align-items:center;justify-content:center;flex-direction:column;
-  font-size:20px;z-index:4;
+  font-size:20px;z-index:5;
   box-shadow:0 0 15px rgba(232,122,158,.5);
 }
 .env-stamp-text{font-size:6px;color:rgba(255,255,255,.9);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 
+/* печать */
 .env-seal{
   position:absolute;bottom:calc(65% - 22px);left:50%;transform:translateX(-50%);
   width:44px;height:44px;
   background:radial-gradient(circle at 35% 35%,#e87a9e,#a8346f);
-  border-radius:50%;z-index:5;
+  border-radius:50%;z-index:6;
   display:flex;align-items:center;justify-content:center;font-size:18px;
   box-shadow:0 0 20px rgba(232,122,158,.6),inset 0 -2px 4px rgba(0,0,0,.3);
   transition:opacity .3s;
 }
 .envelope-container.open .env-seal{opacity:0}
 
+/* письмо — выше тела, но ниже клапана (z-index 3) */
 .env-letter{
   position:absolute;left:8%;right:8%;bottom:8%;height:55%;
   background:linear-gradient(180deg,#12122a,#0d1b4c);
   border:1px solid rgba(232,122,158,.3);
-  border-radius:4px;z-index:2;
+  border-radius:4px;z-index:3;
   display:flex;align-items:center;justify-content:center;
   text-align:center;padding:15px 12px;
   box-shadow:0 0 30px rgba(168,52,111,.3);
   transition:transform 1s cubic-bezier(.25,.8,.25,1) .4s;
 }
 .envelope-container.open .env-letter{transform:translateY(-160%)}
+
 .env-letter-content .letter-greeting{
   font-size:clamp(10px,2.8vw,13px);color:#e87a9e;
   text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;
@@ -381,6 +389,92 @@ body{
 .secret-hint{margin-top:14px;font-size:clamp(11px,3vw,13px);color:#8a7aa8;font-style:italic}
 .secret-box.revealed .secret-hint{color:#e87a9e}
 
+/* ===== ФОТО ===== */
+.photo{
+  text-align:center;
+  margin-top:24px;
+}
+.photo img{
+  display:block;
+  width:100%;
+  max-width:420px;
+  height:auto;
+  margin:0 auto;
+  border-radius:16px;
+  border:1px solid rgba(232,122,158,.3);
+  box-shadow:0 10px 40px rgba(74,45,107,.4);
+  object-fit:cover;
+}
+
+/* hero-фото — чуть меньше */
+.hero img{
+  display:block;
+  width:100%;
+  max-width:320px;
+  height:auto;
+  margin:24px auto 0;
+  border-radius:16px;
+  border:1px solid rgba(232,122,158,.3);
+  box-shadow:0 10px 40px rgba(74,45,107,.4);
+  object-fit:cover;
+}
+
+/* ===== СЛАЙДЕР ===== */
+.slider{
+  position:relative;
+  overflow:hidden;
+  border-radius:16px;
+  border:1px solid rgba(232,122,158,.3);
+  box-shadow:0 10px 40px rgba(74,45,107,.4);
+  background:#0a0a14;
+}
+.slides{
+  display:flex;
+  transition:transform .5s ease;
+}
+.slide{
+  min-width:100%;
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  background:#05060f;
+}
+.slide img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+.slider-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(13,27,76,.8);
+  border:1px solid rgba(232,122,158,.4);
+  color:#e87a9e;font-size:24px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+  transition:all .3s;z-index:2;
+}
+.slider-btn:hover{background:rgba(232,122,158,.3);transform:translateY(-50%) scale(1.08)}
+.slider-btn.prev{left:10px}
+.slider-btn.next{right:10px}
+.slider-dots{
+  position:absolute;bottom:12px;left:0;right:0;
+  display:flex;justify-content:center;gap:8px;z-index:2;
+}
+.slider-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(255,255,255,.4);
+  cursor:pointer;transition:all .3s;
+}
+.slider-dot.active{
+  background:#e87a9e;
+  box-shadow:0 0 10px rgba(232,122,158,.8);
+  transform:scale(1.2);
+}
+@media (max-width:480px){
+  .slider-btn{width:36px;height:36px;font-size:20px}
+  .slide{aspect-ratio:1/1}
+}
+
 .footer{
   text-align:center;padding:40px 20px;color:#8a7aa8;
   font-size:clamp(12px,3vw,14px);font-style:italic;
@@ -400,7 +494,7 @@ body{
 .fade-in{opacity:0;transform:translateY(30px);transition:all .7s ease-out}
 .fade-in.visible{opacity:1;transform:translateY(0)}
 
-@media(max-width:480px){
+@media (max-width:480px){
   .section{padding:16px;margin:24px 0}
   .map-iframe{height:220px}
 }
@@ -418,7 +512,7 @@ body{
 <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Музыка">🔇</button>
 <audio id="bgMusic" loop>
   <!-- ⚠️ ЗАМЕНИТЕ ССЫЛКУ НА СВОЮ МУЗЫКУ -->
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2c8f1e5a3b.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mpeg">
+  <source src="" type="audio/mpeg">
 </audio>
 
 <!-- ===== ЭКРАН-КОНВЕРТ ===== -->
@@ -450,36 +544,37 @@ body{
 
   <!-- 1. ГЛАВНЫЙ ЭКРАН -->
   <div class="hero fade-in">
-    <div class="hero-eyebrow">Приглашение на свадьбу</div>
+    <div class="hero-eyebrow">“приглашение на свадьбу” <br> -  Вот такая … собачка </div>
     <div class="hero-names">
-      Екатерина
+      Катя
       <span class="amp">&</span>
       Олег
     </div>
-    <div class="hero-date">27 · 06 · 2026</div>
-    <div class="hero-place">Москва · LEO LOFT</div>
+    <div class="hero-date">21 · 05 · 2027</div>
+    <div class="hero-place">Пушкино · ДОЛ "ДРУЖБА"</div>
     <div class="hero-scroll">листай вниз ↓</div>
+    <img src="image/IMG_1.PNG">
   </div>
 
   <!-- 2. МЕСТО И КАК ДОБРАТЬСЯ -->
   <div class="section fade-in">
     <div class="section-title">
       📍 Где и когда
-      <small>место встречи</small>
+      <small>место, где началась наша история</small>
     </div>
     <div class="map-card">
-      <div class="loc-icon">🏙️</div>
-      <div class="loc-name">LEO LOFT</div>
-      <div class="loc-addr">Варшавское ш., 33, стр. 13, Москва<br>этаж 2, помещение 211</div>
+      <div class="loc-icon">🏕️</div>
+      <div class="loc-name">ДОЛ "Дружба"</div>
+      <div class="loc-addr">Московская область, Пушкинский городской округ, п. Зелёный городок, тер. Зеленый городок, д. 1, стр. 31<br>этаж 2, помещение 211</div>
       <div class="map-links">
-        <a class="map-link" href="https://yandex.ru/maps/?text=Варшавское+шоссе+33+стр+13+Москва" target="_blank" rel="noopener">🗺️ Яндекс.Карты</a>
-        <a class="map-link" href="https://maps.google.com/?q=Варшавское+шоссе+33+стр+13+Москва" target="_blank" rel="noopener">🌍 Google Maps</a>
+        <a class="map-link" href="https://yandex.ru/maps/?text=Московская%20область%2C%20Пушкинский%20городской%20округ%2C%20п.%20Зелёный%20городок%2C%20тер.%20Зеленый%20городок%2C%20д.%201%2C%20стр.%2031" target="_blank" rel="noopener">🗺️ Яндекс.Карты</a>
+        <a class="map-link" href="https://maps.google.com/?q=Московская+область,+Пушкинский+городской+округ,+п.+Зелёный+городок,+тер.+Зеленый+городок,+д.+1,+стр.+31" target="_blank" rel="noopener">🌍 Google Maps</a>
       </div>
-      <iframe class="map-iframe" src="https://yandex.ru/map-widget/v1/?text=Варшавское%20шоссе%2033%20стр%2013%20Москва&z=16" loading="lazy" allowfullscreen></iframe>
+      <iframe class="map-iframe" src="https://yandex.ru/map-widget/v1/?text=Московская%20область%2C%20Пушкинский%20городской%20округ%2C%20п.%20Зелёный%20городок%2C%20тер.%20Зеленый%20городок%2C%20д.%201%2C%20стр.%2031&z=14" loading="lazy" allowfullscreen></iframe>
     </div>
     <div class="dresscode-note" style="margin-top:16px">
-      <strong>🚗 На машине:</strong> парковка на территории, подробности пришлём по запросу.<br>
-      <strong>🚇 На метро:</strong> ближайшие станции — Варшавская / Каховская, далее 10 минут пешком.
+      <strong>🚗 На машине:</strong> Парковка на территории бесплатная, въезд по паролю <br>
+      <strong>🚇 На метро:</strong> От метро медведково ехать 25-30 минут на такси, для самых бесстрашных электричка Москва- Пушкино ходит каждые 15 минут.
     </div>
   </div>
 
@@ -515,7 +610,7 @@ body{
       </div>
     </div>
     <div class="dresscode-note">
-      <strong>Но если вам кажется, что лучшим вариантом на этом мероприятии будет то самое зелёное платье или костюм, которое уже долго ждало своего часа в вашем шкафу — напишите нам, скорее всего мы одобрим.</strong> 💚
+      <strong>Но если "то самое зеленое платье или костюм из вашего шкафа" попросит вас надеть его - напишите нам и мы согласуем другой цвет:)</strong> 💚
     </div>
   </div>
 
@@ -523,28 +618,28 @@ body{
   <div class="section fade-in">
     <div class="section-title">
       🗓️ Программа
-      <small>как пройдёт наш вечер</small>
+      <small>Что, где, когда?</small>
     </div>
     <div class="timeline">
       <div class="tl-item">
         <span class="tl-time">15:45</span>
-        <span class="tl-desc">Сбор гостей, welcome-зона</span>
+        <span class="tl-desc">Сбор гостей на площади лагеря «Дружба»</span>
       </div>
       <div class="tl-item">
         <span class="tl-time">16:00</span>
-        <span class="tl-desc">Торжественная церемония</span>
+        <span class="tl-desc">Знакомство и самая весёлая торжественная церемония</span>
       </div>
       <div class="tl-item">
-        <span class="tl-time">17:00</span>
-        <span class="tl-desc">Банкет и поздравления</span>
-      </div>
-      <div class="tl-item">
-        <span class="tl-time">20:30</span>
-        <span class="tl-desc">Финал торжественной части, прощаемся с самыми маленькими и уставшими</span>
+        <span class="tl-time">17:15</span>
+        <span class="tl-desc">Банкет, на котором вас ждут: танцы с бубном, цирк с конями и звёздная программа</span>
       </div>
       <div class="tl-item">
         <span class="tl-time">21:00</span>
-        <span class="tl-desc">Дискотека для старших отрядов 💃</span>
+        <span class="tl-desc">Начало звездопада (дискотеки) 💃</span>
+      </div>
+      <div class="tl-item">
+        <span class="tl-time">23:00</span>
+        <span class="tl-desc">Провожаем последних выживших, а самых отчаянных укладываем спать</span>
       </div>
     </div>
   </div>
@@ -552,16 +647,17 @@ body{
   <!-- 5. ПРАВИЛА -->
   <div class="section fade-in">
     <div class="section-title">
-      📋 Правила
+      📋 Сообщение во вселенную
       <small>нашего космического лагеря</small>
     </div>
     <ol class="rules">
-      <li>Веселиться от души — обязательно!</li>
-      <li>Дресс-код — рекомендация, а не приговор. Главное — вам должно быть комфортно.</li>
-      <li>Алкоголь — в умеренных количествах и только для совершеннолетних гостей.</li>
-      <li>Просим не дарить цветы — лучше принесите игрушку для нашей кошки 🐱</li>
-      <li>Подтверждение присутствия обязательно — заполните анкету ниже.</li>
+      <li>Наш шифоньер и кровать не переживут новых сервизов и комплектов постельного белья, поэтому мы будем крайне рады любым денежным подаркам!</li>
+      <li>Мы пишем сценарий нашей свадьбы сами, поэтому заранее просим не рассчитывать на время для тостов каждого, но мы будем искренне рады, если вы расскажете их в перерывах или напишете в открытках!</li>
+      <li>Мы отправляем приглашения каждому лично, поэтому +1 в день мероприятия нам будет некуда посадить :(</li>
     </ol>
+    <div class="photo" style="text-align:center; margin-top:24px;">
+      <img src="image/IMG_2.JPG" alt="Наше фото" style="max-width:100%; border-radius:16px;">
+    </div>
   </div>
 
   <!-- 6. ОБРАТНЫЙ ОТСЧЁТ -->
@@ -582,7 +678,7 @@ body{
   <div class="section fade-in" id="rsvpSection">
     <div class="section-title">
       ✋ Подтверждение присутствия
-      <small>пожалуйста, заполните до 01.06.2026</small>
+      <small>пожалуйста, заполните до 01.04.2027</small>
     </div>
     <form class="rsvp-form" id="rsvpForm" onsubmit="submitRsvp(event)">
       <div class="field">
@@ -592,19 +688,6 @@ body{
 
       <div class="field">
         <label>Придёте? *</label>
-        <div class="radio-group">
-          <label class="radio-pill"><input type="radio" name="attend" value="yes" required> Да, буду!</label>
-          <label class="radio-pill"><input type="radio" name="attend" value="no"> К сожалению, нет</label>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>С кем вы будете?</label>
-        <div class="radio-group">
-          <label class="radio-pill"><input type="radio" name="company" value="alone"> Один / одна</label>
-          <label class="radio-pill"><input type="radio" name="company" value="pair"> С парой</label>
-          <label class="radio-pill"><input type="radio" name="company" value="kids"> С детьми</label>
-        </div>
       </div>
 
       <div class="field" id="kidsField" style="display:none">
@@ -620,7 +703,7 @@ body{
           <label class="checkbox-pill"><input type="checkbox" name="drink" value="whiskey"> 🥃 Виски</label>
           <label class="checkbox-pill"><input type="checkbox" name="drink" value="vodka"> 🍸 Водка</label>
           <label class="checkbox-pill"><input type="checkbox" name="drink" value="nonAlcohol"> 🧃 Безалкогольное</label>
-          <label class="checkbox-pill"><input type="checkbox" name="drink" value="other"> Другое</label>
+          <label class="checkbox-pill"><input type="checkbox" name="drink" value="other"> Пиво</label>
         </div>
       </div>
 
@@ -645,16 +728,37 @@ body{
     </div>
     <div class="secret-box" id="secretBox" onclick="revealSecret()">
       <div class="secret-inner">
-        Мы так счастливы, что именно ВЫ будете рядом в этот важный день!
-        Каждый из вас — часть нашей истории. Спасибо, что вы есть! 💛
+      Мы не одни на планете, и в пути млечном ” Встретимся в мае ,
+      спасибо, что готовы прожить этот день  с нами! 💛
       </div>
       <div class="secret-hint" id="secretHint">👆 Нажми, чтобы прочитать</div>
     </div>
   </div>
 
+  <!-- 9. СЛАЙДЕР С ФОТО -->
+  <div class="section fade-in">
+    <div class="section-title">
+      📸 Наши моменты
+      <small>листайте галерею</small>
+    </div>
+    <div class="slider" id="slider">
+      <div class="slides" id="slides">
+        <div class="slide"><img src="image/sl1.JPG" alt="Фото 1"></div>
+        <div class="slide"><img src="image/sl2.JPG" alt="Фото 2"></div>
+        <div class="slide"><img src="image/sl3.JPG" alt="Фото 3"></div>
+        <div class="slide"><img src="image/sl4.JPG" alt="Фото 4"></div>
+        <div class="slide"><img src="image/sl5.JPG" alt="Фото 4"></div>
+        <div class="slide"><img src="image/sl6.JPG" alt="Фото 4"></div>
+      </div>
+      <button class="slider-btn prev" onclick="moveSlide(-1)">‹</button>
+      <button class="slider-btn next" onclick="moveSlide(1)">›</button>
+      <div class="slider-dots" id="sliderDots"></div>
+    </div>
+  </div>
+
   <!-- ФУТЕР -->
   <div class="footer fade-in">
-    <p>С любовью,<br><strong>Екатерина & Олге</strong></p>
+    <p>С любовью,<br><strong>Катя & Олге</strong></p>
     <p style="margin-top:10px">💌 Ждём каждого из вас!</p>
   </div>
 
@@ -750,7 +854,7 @@ function launchConfetti(count){
 }
 
 // ===== ОБРАТНЫЙ ОТСЧЁТ =====
-var weddingDate=new Date(2026,5,27,15,45,0);
+const weddingDate = new Date(2027, 4, 21, 0, 0, 0);
 function updateCountdown(){
   var now=new Date();
   var diff=weddingDate.getTime()-now.getTime();
@@ -790,13 +894,11 @@ function submitRsvp(e){
   const form = document.getElementById('rsvpForm');
   const data = new FormData(form);
 
-  // Собираем выбранные напитки в строку через запятую
   const drinks = [];
   form.querySelectorAll('input[name="drink"]:checked').forEach(cb => {
     drinks.push(cb.value);
   });
 
-  // Формируем параметры (ключи = заголовки колонок в таблице)
   const params = new URLSearchParams();
   params.append('name', data.get('name') || '');
   params.append('attend', data.get('attend') || '');
@@ -810,7 +912,6 @@ function submitRsvp(e){
   btn.disabled = true;
   btn.textContent = 'Отправляем...';
 
-  // Если URL не заменён — показываем заглушку (для теста без таблицы)
   if (SCRIPT_URL === 'ВАШ_WEB_APP_URL_ЗДЕСЬ') {
     console.warn('⚠️ SCRIPT_URL не настроен. Данные не отправлены.');
     setTimeout(function(){
@@ -857,6 +958,57 @@ function initScrollAnimations(){
   },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.fade-in').forEach(function(el){obs.observe(el)});
 }
+
+// ===== СЛАЙДЕР =====
+(function(){
+  var slidesEl = document.getElementById('slides');
+  if(!slidesEl) return;
+  var slides = slidesEl.querySelectorAll('.slide');
+  var dotsContainer = document.getElementById('sliderDots');
+  var current = 0;
+  var total = slides.length;
+
+  for(var i=0;i<total;i++){
+    var dot = document.createElement('div');
+    dot.className = 'slider-dot' + (i===0?' active':'');
+    dot.dataset.index = i;
+    dot.onclick = function(){
+      goTo(parseInt(this.dataset.index));
+    };
+    dotsContainer.appendChild(dot);
+  }
+
+  function update(){
+    slidesEl.style.transform = 'translateX(-' + (current*100) + '%)';
+    var dots = dotsContainer.querySelectorAll('.slider-dot');
+    dots.forEach(function(d,i){
+      d.classList.toggle('active', i===current);
+    });
+  }
+
+  window.moveSlide = function(dir){
+    current = (current + dir + total) % total;
+    update();
+  };
+
+  function goTo(i){
+    current = i;
+    update();
+  }
+
+  var startX = 0;
+  slidesEl.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX;
+  }, {passive:true});
+  slidesEl.addEventListener('touchend', function(e){
+    var diff = e.changedTouches[0].clientX - startX;
+    if(Math.abs(diff) > 50){
+      moveSlide(diff < 0 ? 1 : -1);
+    }
+  }, {passive:true});
+
+  setInterval(function(){ moveSlide(1); }, 6000);
+})();
 </script>
 </body>
 </html>
